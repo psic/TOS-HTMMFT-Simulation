@@ -1,0 +1,2 @@
+step   ball_X    ball_Y    side
+410     1376    2197        f

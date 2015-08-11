@@ -1,0 +1,91 @@
+Running Tao of Soccer Education Edition ver 2.2.x
+
+
+===============================================================================
+WINDOWS
+===============================================================================
+
+A. Regular run on one computer
+
+1) Open three Command Prompt windows in this directory.
+
+3) Start the soccer server by typing "SoccerServer.bat" in window 1.
+
+2) Start the viewer client by typing "ViewerClient.bat" in window 2.
+
+4) Connect the viewer client to server. Click on Connect and View button on the toolbar. In the dialog window that follows, click on OK leaving default settings intact. A soccer ball will appear in the field center.
+5) start soccer team client by typing "Both_Teams.bat" in window 3. Players will appear on the filed. 
+
+6) Start the game. On the viewer client window toolbar click on the red Play the Game button (the only one enabled); the server will be staying in the NoGame mode indefinitely. Then click on Forward the Game Period button to switch to PreGame mode. Then click on Play the Game button again; the Step/Pause button will get enabled; the system switches to the regular play mode. The duration is determined by the parameter in property file server.ini (games_to_play=50). 
+
+7) (optional) To save real-time game statistics to file, open a fourth DOS window and start the observer client by typing "Observer.bat" in it. On start, this application displays the automatically generated filename to that the gathered statistics are saved. 
+This file is located in //bin. 
+
+All .bat files mentioned above could be started without opening the Command Prompt windows, just by double clicking on these file items in Windows Explorer. By using different .bat files available in this folder, you can run different configuration of player clients. The only advantage of opening the Command Prompt windows is viewing the information about program crashes, if any. When you start a .bat file from Windows Explorer, the information about a crash is not displayed.
+
+
+B. Saving current situation to text file. 
+
+1) Pause the game by clicking on the Pause/Step Forward button (displaying the Pause icon). 
+
+2) Rearrange players and the ball as necessary by dragging them with the mouse. 
+
+3) Save the game snapshot to file by clicking on Save a Game Snapshot button; in the Save popup dialogue window, select the directory and type the filename. 
+
+4) Continue game by clicking on Play button. 
+
+
+C. Restoring game from a pre-saved snapshot
+
+This feature is useful for evaluating the simulated soccer team by repeatedly playing same situation, say the corner kick, attack on the goal, etc. and gathering statistics. 
+
+1) In the paused state, using the Load the Situation File button. In the Open dialogue, choose the situation file that has been saved before. 
+
+2) In the Situation Setup dialogue that follows, set the number of repetitions of the selected situation and the duration in simulation steps (repetition period). Then click OK and click on Run. The game will be run several times with re-starting the snapshot; then the game will continue in the natural way. 
+
+
+C. Running TOS bundle with the debugger
+
+To test this mode, just start Debugger.bat; the game must start with reduced number of players - just as a demo. However, for debugging, this mode is only useful if is run from an integrated development environment like Eclipse that allows for stepwise execution and tracing the source code. 
+
+
+D. Running TOS without the viewer client.
+
+This feature is useful if the computer has poor performance. As the game monitor consumes about 2/3 of all required processor time, disabling this application would resolve the limited resource issue. You normally need this mode for gathering statistics in a set of many simulated games. 
+
+Start the server and then the teams. After a short while, teams will begin playing the game automatically if the monitor does not connect to the server after a pre-defined time interval since the server had started (90 seconds by default; this time can be changed using the server initialization file). 
+
+For using the Observer to collect data, start it only after the game begins on its own. The reason is that the server does not distinguish between the monitor and the observer because both are viewer clients.  
+
+
+E. Controlling player by user.
+
+By using the Game Monitor, user can gain the control of any artificial player on the field. 
+To gain the control, click on the Pick a Player control button on the toolbar. In the dialog that follows, select player ID from one of the two drop down lists and click on OK.  To release a player, click on Release Player/Quit button and then confirm your command. 
+User controlled players have special marks in the center; they are displayed on all monitors connected to server. The player controlled by this user has an extra mark that is only displayed on the owner’s monitor. 
+Player actions can be controlled with the mouse and keyboard. Using the mouse clicks is the primary method because it causes one of the two different persistent actions by the player. (In doing so, do not drag the mouse, anyway.)
+1) Turn and dash. To move the player with the mouse, left-click on the soccer field. Player will run to the clicked point. 
+2) Chase and kick. To make the player chasing and kicking the ball, right-click on the field. Player will approach the ball and kick it to the clicked point. 
+Both actions are displayed as line markers on the soccer filed. The chase/kick marker differs in that it is blinking. These persistent actions have limited time (2.5 s); after it expires, player does nothing. To continue, new command must be entered. New command can always be entered before the expiration of the previous one.
+Keyboard is used to generate one time actions. Only five keys are used: UP, DOWN, LEFT, RIGHT, ENTER, and SHIFT. The first four keys generate dash commands in the direction relative to player facing direction with the maximal force. The ENTER makes player kicking the ball in its facing direction with the maximal force. This command will get through if only the ball is within the reach. Combination SHIFT+ENTER generates the kick command with the force reduced to 30 per cent. All commands entered from the keyboard cancel current persistent player action initiated with the mouse. With the key pressed, the command is repeated on each simulation step. However, the server would accept the kick command if only the specified time has elapsed after the previous kick. This limit is set in file server_full_set.ini.
+
+
+F. Running across a network
+
+Before running the TOS bundle on a computer network, install this software on each computer. Then determine the IP address of the computer node where the server application will run. In doing so, Command Prompt window run command ipconfig; the IP address will be displayed. 
+In the simplest case, when the server and player applications run on same computer, no changes to the configuration files are needed. After starting the viewer client on a remote computer, click on the Connect and View button and in the dialog that follows enter the IP address of the server. The TOS server application must be started before doing so. The first viewer client that connects to sever becomes the Game Coordinator. 
+To run the player client application on a standalone computer, its .ini file must be modified to accommodate the server IP address. In the supplied bundle, file Both_Teams_network.bat was created for test purposes. This file differs from the regular Both_Teams.bat in that it uses configuration file sfu_team_network.ini as parameter in the command that starts the player client application. File sfu_team_network.ini points at address 192.168.1.105 that was used in the test runs. This address must be replaced with the actual IP address of the server host. If the player client is split in several applications, each of those must have own .ini and .bat file for running. 
+
+
+G. Terminating the Game
+
+The simulation will terminate automatically after the pre-specified number of games played. This number is set in the configuration file server.ini. 
+User at Game Coordinator can gracefully terminate the simulation at any time by clicking on the Relase Player/Quit button or just attempting to close the window. After the confirmation dialog, quit command is sent to all applications through the server. Then a message indicating that the bundle had been terminated will be displayed for the user. 
+
+
+
+===============================================================================
+LINUX
+===============================================================================
+
+Linux users proved to feel comfortable with the instructions written for Windows.

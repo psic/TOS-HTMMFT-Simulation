@@ -1,0 +1,39 @@
+Tao of Soccer Education Edition version 2.2.x
+
+
+This file explains the purpose of this system and its components. 
+For the instructions on how to run it, see separate file.
+
+This version is used for educational purposes. Odd-numbered subversions use simulated soccer players with deliberately limited capabilities. Students are encouraged to improve player behavior in their educational projects if this meets the objectives of the course. Even-numbered subversions contain enhanced, yet not ideal, players.  
+
+
+Tao of Soccer (TOS) is a distributed simulated soccer client-server system. Any soccer player in this simulation system can be driven by artificial intelligence or by user. In the latter case, this system becomes more a massive multi-player gaming environment than a classical simulator. 
+
+The system comprises five Java applications:
+
+1) a soccer server (soccer.server.SoccerServerMain),
+2) a soccer team client (soccer.tos_teams.sfu.SocerTeamMain), 
+3) a ‘viewer’ client Soccer Monitor (soccer.client.ViewerClientMain), 
+4) a debugger application (soccer.debugger.DebuggerMain), and 
+5) a ‘viewer’ client Observer (soccer.tos_tools.Observer). 
+
+Except the debugger, these applications use two-way communication by sending/receiving UDP packets over a computer network and thus can be running on separate hosts. The Observer is using one-way communication only by receiving UDP packages from the server. 
+
+In the default configuration, all applications are running on single computer with one viewer client. Multiple viewer clients are needed for running TOS bundle on a network. Soccer players can also be distributed across several hosts in different configurations ranging from 22 to 1 player thread per host. This only makes sense for very sophisticated players driven by the artificial intelligence that require substantial computing resources. As provided in this release, the artificial soccer agent is not so sophisticated. 
+For running TOS across a network, the server IP address and port ID are supplied to player and observer applications as parameters in the respective property (*.ini) files. In the viewer client, they are entered by user in a setup dialog. 
+
+The purpose of the Soccer Monitor viewer client application is displaying the state of the game for the user; also it plays two additional roles in TOS bundle: (1) controlling the whole bundle and (2) controlling one player agent by the user. The first function is automatically assigned to the first viewer client that connects to the server; this client is referred to as Game Coordinator. Control functions include starting, pausing, and terminating the game, saving game snapshots to a file and resetting the saved game state. The second role is optional for all viewer clients including the Game Coordinator.
+
+The soccer server application simulates a soccer world by maintaining the state of the ball and the soccer players resulting from their actions. This application also enforces the rules of the soccer game. In particular, server teleports players in standard situations like kickoff or whenever the rules are violated. It is also taking care of timing, maintaining the score, and gathering some statistics.  
+
+The soccer team client is a multi-threaded application, running from 1 to 22 threads, each simulating one player. Each player receives from the server the information about the state of the world. Based on this, player builds its own world model and makes decisions about how to act in current simulation cycle (dash or kick the ball). The player thread sends these action commands to the server which executes them by updating the state of the world. 
+
+As implemented, player behavior model is deliberately created far from perfect; for the purpose of exercise in some courses, students can be asked to substantially modify this behavior and measure the improvement, if any. 
+
+Each copy of the soccer team client application is using the number of players on each side as parameter in the property file. Therefore, to play the game, it is possible to use simultaneously from 22 to 1 properly configured copies of this applications placed on up to 22 different computers. 
+The default configuration is using two identical teams of 11 players in each, i.e. just one application. By running more than one soccer team client applications, it is possible to use differently programmed soccer players (normally two different teams of 11). In the extreme case, it is possible to run 22 soccer team clients each containing just one player that has individually programmed behavior. These applications can be run on same or different computers in different combinations; the maximal number of players per team is the only constraint in this case. 
+
+The debugger application is used for running the TOS bundle as single application on single computer with the purpose of debugging or as a demo simulation that is easier to launch. Debugging the whole TOS bundle containing three or more applications that are asynchronously communicating over the network is difficult indeed. In particular, it is nearly impossible to do so in an IDE such as Eclipse using the stepwise debugging mode. The debugger application removes this difficulty. It glues together all applications In the TOS bundle in a single monolithic application that is possible to run in Eclipse stepwise. Network communication and real-time threading in this case are emulated. The sequence of exchanging by the UDP packets by TOS components is synchronous and fully controlled by the debugger. The UDP packets themselves in this configuration are emulated by different data objects conveying same information. The whole TOS bundle in this case runs on single computer only. 
+
+The observer client is optional and is intended to be used for saving game statistics to a file with the purpose of analyzing individual player and/or team performance after running the game many times  As it is, the provided basic version of this application captures only the state of the ball on each simulation cycle and saves it to file. For the advanced analysis, it should be modified to record player data. Students are encouraged to enhance this application in their educational projects. 
+
